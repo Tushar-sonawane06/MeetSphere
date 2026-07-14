@@ -7,11 +7,12 @@ import {
     FormControlLabel,
     Link,
     Paper,
+    Snackbar,
     Stack,
     TextField,
     Typography,
   } from "@mui/material";
-  
+
   import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
   
   export default function Authentication() {
@@ -30,14 +31,24 @@ import {
     let handleAuth = async() => {
       try{
         if(formState === 0){
-
+          let result = await handleLogin(username,password);
+          
         }
 
         if(formState ===1){
+           let result = await handleRegister(name, username, password);
+           console.log(result);
+           setMessage(result);
+           setUsername("")
+           setOpen(true);
+           setError("")
+           setFormState(0)
+           setPassword("")
            
         }
       }catch(err){
-
+        let message = (err.response.data.message);
+        setError(message);
       }
     }
 
@@ -89,10 +100,10 @@ import {
               </Box>
   
               <div>
-                <Button varient={formState===0 ? "contained":""} onClick={()=>{setFormState(0)}}>
+                <Button variant={formState===0 ? "contained":""} onClick={()=>{setFormState(0)}}>
                   Sign In
                 </Button>
-                <Button varient={formState===1 ? "contained" : ""} onClick={()=>{setFormState(1)}}>
+                <Button variant={formState===1 ? "contained" : ""} onClick={()=>{setFormState(1)}}>
                   Sign Up
                 </Button>
               </div>
@@ -105,6 +116,7 @@ import {
                 fullWidth
                 id="username"
                 label="Full Name"
+                value={name}
                 name="username"
                 autoComplete="username"
                 autoFocus
@@ -119,6 +131,7 @@ import {
                 id="username"
                 label="Username"
                 name="username"
+                value={username}
                 autoComplete="username"
                 autoFocus
                 type="email"
@@ -132,17 +145,19 @@ import {
                 fullWidth
                 name="password"
                 label="Password"
+                value={password}
                 id="password"
                 type="password"
                 onChange={(e)=>setPassword(e.target.value)}
               />
   
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Remember me"
-              />
+              
             </Box>
-  
+            
+            <p style={{color:"red"}}>
+              {error}
+            </p>
+
             <Button
               fullWidth
               variant="contained"
@@ -151,11 +166,18 @@ import {
                 mb: 2,
                 py: 1.2,
               }}
+              onClick={handleAuth}
             >
-              SIGN IN
+              {formState === 0 ? "Login" : "Register"}
             </Button>
           </Box>
         </Paper>
+        <Snackbar
+           open={open}
+           autoHideDuration={4000}
+           message={message}
+        />
       </Box>
+      
     );
   }

@@ -3,12 +3,11 @@ import axios from "axios";
 import React, {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {HttpStatusCode} from "axios";
-import router from "../../../backend/src/routes/userRoutes";
 
 export const AuthContext = React.createContext({});
 
 const client = axios.create({
-    baseURL : "localhost:8000/api/v1/users"
+    baseURL : "http://localhost:8000/api/v1/users"
 })
 
 export const AuthProvider = ({children}) => {
@@ -16,7 +15,7 @@ export const AuthProvider = ({children}) => {
 
     const [userData, setUserData] = useState(authContext);
 
-    const router = useNavigate();
+    const navigate = useNavigate();
 
     const handleRegister = async(name,username,password)=>{
         try{
@@ -49,7 +48,7 @@ export const AuthProvider = ({children}) => {
     }
 
     const data = {
-        userData, setUserData, handleRegister
+        userData, setUserData, handleRegister, handleLogin
     }
 
     return (
