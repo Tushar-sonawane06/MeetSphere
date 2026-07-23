@@ -56,13 +56,22 @@ export default function VideoMeetComponenet(){
                 setAudioAvailable(false);
             }
 
-
             if(navigator.mediaDevices.getDisplayMedia){
                 setScreenAvailable(true);
             }else{
                 setScreenAvailable(false);
             }
 
+            if(videoAvailable || audioAvailable){
+                const userMediaStream = await navigator.mediaDevices.getUserMedia({video:videoAvailable, audio: audioAvailable});
+                
+                if(userMediaStream){
+                    window.localStream = userMediaStream;
+                    if(localVideoRef.current){
+                        localVideoRef.current.srcObject = userMediaStream;
+                    }
+                }
+            } 
             
         }catch(err){
 
