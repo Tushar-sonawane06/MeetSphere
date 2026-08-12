@@ -11,13 +11,10 @@ MeetSphere is a video conferencing web app inspired by Zoom, built with a React 
 - Mute/unmute audio and enable/disable video
 - Responsive UI
 
-> Edit this list to match what's actually implemented in your app.
-
 ## Tech Stack
 
 **Frontend**
 - React
-- (Add: React Router, state management, CSS framework, etc. if used)
 
 **Backend**
 - Node.js
@@ -98,14 +95,6 @@ The app should now be running at `http://localhost:3000` (frontend) and `http://
 - [ ] Meeting recording
 - [ ] Authentication / user accounts
 - [ ] Waiting room / host controls
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
 
 ## Author
 
