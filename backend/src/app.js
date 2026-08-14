@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import {connectToSocket} from "./controllers/socketManager.js";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import userRoutes from "./routes/userRoutes.js";
 
@@ -12,7 +14,10 @@ const app = express();
 const server = createServer(app);
 const io = connectToSocket(server);
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, ".env") });
+console.log("MONGODB_URL in app.js:", process.env.MONGODB_URL);
+
 
 app.set("port",(process.env.PORT || 8000));
 

@@ -42,7 +42,7 @@ const register = async (req,res)=>{
     try{
         const existingUser = await user.findOne({username});
         if(existingUser){
-            return res.status(httpStatus.FOUND).JSON({MESSAGE:"User already exists"}); 
+            return res.status(httpStatus.CONFLICT).json({message:"User already exists"}); 
         }
 
         const hashedPassword = await bcrypt.hash(password,10);
@@ -55,9 +55,9 @@ const register = async (req,res)=>{
 
         await newUser.save();
 
-        res.status(httpStatus.CREATED).json({messade:"User registered successfully"});
+        res.status(httpStatus.CREATED).json({message:"User registered successfully"});
     }catch(err){
-        return res.json({message: `User already exists`});
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: `Something went wrong: ${err.message || err}`});
     }
 }
 
