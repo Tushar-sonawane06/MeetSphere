@@ -16,9 +16,13 @@ import NotFoundPage from './pages/notFound.jsx';
 import ProfilePage from './pages/profile.jsx';
 import SettingsPage from './pages/settings.jsx';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 function App() {
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
   return (
-    <ThemeProvider>
+    <GoogleOAuthProvider clientId={googleClientId}>
+      <ThemeProvider>
       <Router>
         <AuthProvider>
           <Routes>
@@ -39,6 +43,7 @@ function App() {
         </AuthProvider>
       </Router>
     </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }
 

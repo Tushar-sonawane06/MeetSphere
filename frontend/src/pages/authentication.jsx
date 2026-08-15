@@ -4,6 +4,7 @@ import { Video, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 import { AuthContext } from '../contexts/authContext.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
 import { Sun, Moon } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Authentication() {
   const navigate = useNavigate();
@@ -23,8 +24,21 @@ export default function Authentication() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const { handleRegister, handleLogin } = useContext(AuthContext);
   const { theme, toggle } = useTheme();
+  const { handleRegister, handleLogin, handleGoogleLogin } = useContext(AuthContext);
+
+  const handleGoogleSuccess = async (response) => {
+    setError('');
+    setLoading(true);
+    try {
+      await handleGoogleLogin(response.credential);
+    } catch (err) {
+      setError(err?.response?.data?.message || 'Google authentication failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -250,6 +264,21 @@ export default function Authentication() {
               {!loading && (formState === 0 ? 'Sign In' : 'Create Account')}
             </button>
           </form>
+
+          <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', color: 'var(--text-muted)' }}>
+            <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+            <span style={{ padding: '0 10px', fontSize: 12 }}>or continue with</span>
+            <div style={{ flex: 1, height: 1, background: 'var(--border)' }}></div>
+          </div>
+
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('Google Authentication failed')}
+              theme={theme === 'dark' ? 'filled_black' : 'outline'}
+              width="380"
+            />
+          </div>
 
           <p style={{ textAlign: 'center', marginTop: 24, fontSize: '13px', color: 'var(--text-secondary)' }}>
             {formState === 0 ? "Don't have an account?" : 'Already have an account?'}

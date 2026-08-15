@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext({});
 
 const client = axios.create({
-    baseURL: `http://localhost:8000/api/v1/users`
+    baseURL: `https://meetsphere-backend.tushar-sonawane.xyz/api/v1/users`
 })
 
 
@@ -57,6 +57,22 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const handleGoogleLogin = async (credential) => {
+        try {
+            let request = await client.post("/google-login", {
+                credential: credential
+            });
+
+            if (request.status === httpStatus.OK) {
+                localStorage.setItem("token", request.data.token);
+                localStorage.setItem("username", request.data.username);
+                router("/home")
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     const getHistoryOfUser = async () => {
         try {
             let request = await client.get("/get_all_activity", {
@@ -85,7 +101,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const data = {
-        userData, setUserData, addToUserHistory, getHistoryOfUser, handleRegister, handleLogin
+        userData, setUserData, addToUserHistory, getHistoryOfUser, handleRegister, handleLogin, handleGoogleLogin
     }
 
     return (

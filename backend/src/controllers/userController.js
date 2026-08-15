@@ -3,6 +3,9 @@ import {user} from "../models/userModel.js";
 import {meeting} from "../models/meetingModel.js";
 import bcrypt, {hash}  from "bcrypt";
 import crypto from "crypto";
+import { OAuth2Client } from "google-auth-library";
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // login
 const login = async (req,res)=>{
@@ -96,4 +99,45 @@ const addToHistory = async (req,res)=>{
     }
 }
 
-export {login,register, addToHistory, getUserHistory};
+const googleLogin = async (req, res) => {
+    const { credential } = req.body;
+
+    if (!credential) {
+        return res.status(httpStatus.BAD_REQUEST).json({ message: "Google credential is required" });
+    }
+
+    try {
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { sub, email, name } = payload;
+
+        if (!email) {
+            return res.status(httpStatus.BAD_REQUEST).json({ message: "Google account does not provide an email" });
+        }
+
+        let foundUser = await user.findOne({ $or: [{ googleId: sub }, { username: email }] });
+
+        if (!foundUser) {
+            foundUser = new user({
+                name: name || email.split('@')[0],
+                username: email,
+                googleId: sub
+            });
+        } else if (!foundUser.googleId) {
+            foundUser.googleId = sub;
+        }
+
+        let token = crypto.randomBytes(20).toString("hex");
+        foundUser.token = token;
+        await foundUser.save();
+
+        return res.status(httpStatus.OK).json({ token: token, username: foundUser.username });
+    } catch (err) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: `Something went wrong: ${err.message || err}` });
+    }
+}
+
+export {login, register, addToHistory, getUserHistory, googleLogin};

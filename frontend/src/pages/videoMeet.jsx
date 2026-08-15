@@ -5,7 +5,7 @@ import { Badge } from '@mui/material';
 import { Video, VideoOff, Mic, MicOff, Monitor, MonitorOff, MessageSquare, PhoneOff, Send, Users, X } from 'lucide-react';
 import styles from "../styles/videoComponent.module.css";
 
-const server_url = "http://localhost:8000";
+const server_url = "https://meetsphere-backend.tushar-sonawane.xyz";
 var connections = {};
 const peerConfigConnections = { "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }] };
 
