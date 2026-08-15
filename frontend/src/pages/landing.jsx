@@ -179,19 +179,19 @@ export default function LandingPage() {
 
       {/* ── HERO ────────────────────────────────────────── */}
       <section style={{
-        paddingTop: 'calc(var(--navbar-h) + 80px)',
-        paddingBottom: '80px',
+        paddingTop: 'calc(var(--navbar-h) + clamp(40px, 6vw, 80px))',
+        paddingBottom: 'clamp(48px, 6vw, 80px)',
         background: 'var(--bg-page)',
       }}>
         <div className="container">
-          <div style={{
+          <div className="landing-hero-inner" style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 64,
+            gap: 48,
             flexWrap: 'wrap',
           }}>
             {/* Left: copy */}
-            <div style={{ flex: '1 1 360px', maxWidth: 520 }} className="animate-fade-in-up">
+            <div style={{ flex: '1 1 320px', maxWidth: 520 }} className="landing-hero-copy animate-fade-in-up">
               <div className="badge badge-blue" style={{ marginBottom: 'var(--space-5)' }}>
                 <span className="badge-dot" />
                 Modern video meetings, built for teams
@@ -218,7 +218,7 @@ export default function LandingPage() {
                 High-quality video meetings with real-time chat, screen sharing, and a beautifully simple experience — designed for modern teams.
               </p>
 
-              <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+              <div className="btn-group" style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
                 <Link to={isAuth ? "/home" : "/auth"} className="btn btn-primary btn-lg">
                   {isAuth ? "Go to Dashboard" : "Get Started — It's Free"}
                   <ArrowRight size={18} />
@@ -245,7 +245,7 @@ export default function LandingPage() {
             </div>
 
             {/* Right: meeting preview */}
-            <div style={{ flex: '1 1 380px', display: 'flex', justifyContent: 'center' }}>
+            <div className="landing-hero-preview" style={{ flex: '1 1 320px', display: 'flex', justifyContent: 'center', width: '100%' }}>
               <MeetingPreview />
             </div>
           </div>

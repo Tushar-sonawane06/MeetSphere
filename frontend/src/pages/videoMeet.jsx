@@ -237,10 +237,10 @@ export default function VideoMeetComponent() {
   // ── Lobby ──────────────────────────────────────────────
   if (askForUsername) {
     return (
-      <div style={{
+      <div className="video-lobby-inner" style={{
         minHeight: '100vh', background: '#0d1117',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        flexDirection: 'column', gap: 32, padding: 24,
+        flexDirection: 'column', gap: 32, padding: 'clamp(16px, 4vw, 24px)',
       }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
           <div style={{ width: 52, height: 52, background: '#3b82f6', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', }}>
@@ -353,7 +353,7 @@ export default function VideoMeetComponent() {
           </div>
 
           {/* Local video (self) */}
-          <div style={{ position: 'absolute', bottom: 80, left: 12, width: 180, borderRadius: 12, overflow: 'hidden', border: '2px solid #3b82f6', boxShadow: '0 8px 24px rgba(0,0,0,0.5)', zIndex: 10 }}>
+          <div style={{ position: 'absolute', bottom: 80, left: 12, width: 'clamp(120px, 22vw, 180px)', borderRadius: 12, overflow: 'hidden', border: '2px solid #3b82f6', boxShadow: '0 8px 24px rgba(0,0,0,0.5)', zIndex: 10 }}>
             <div style={{ position: 'relative', aspectRatio: '16/9', background: '#161b22' }}>
               <video ref={localVideoref} autoPlay muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               {!video && (

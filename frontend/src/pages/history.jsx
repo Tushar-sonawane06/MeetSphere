@@ -1,17 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../contexts/authContext.jsx';
-import { useNavigate, Link } from 'react-router-dom';
-import { Home, Calendar, Hash, AlertCircle, Inbox } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext.jsx';
-import { Sun, Moon, Video } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Calendar, Hash, AlertCircle, Inbox, Video } from 'lucide-react';
+import AppHeader from '../components/AppHeader.jsx';
 
 export default function History() {
   const { getHistoryOfUser } = useContext(AuthContext);
   const [meetings, setMeetings] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const { theme, toggle } = useTheme();
-  const routeTo = useNavigate();
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -56,34 +53,10 @@ export default function History() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
-      <header style={{
-        height: 'var(--navbar-h)',
-        background: 'var(--bg-surface)',
-        borderBottom: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 var(--space-6)',
-        position: 'sticky', top: 0, zIndex: 50,
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 17, color: 'var(--text-primary)', letterSpacing: '-0.02em', textDecoration: 'none' }}>
-          <div style={{ width: 30, height: 30, background: 'var(--accent)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-            <Video size={16} strokeWidth={2.5} />
-          </div>
-          MeetSphere
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
-            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-          <button className="btn btn-ghost btn-sm" onClick={() => routeTo('/home')} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Home size={14} />
-            Dashboard
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Main */}
-      <main style={{ flex: 1, maxWidth: 720, margin: '0 auto', width: '100%', padding: 'var(--space-10) var(--space-6)' }}>
+      <main style={{ flex: 1, maxWidth: 720, margin: '0 auto', width: '100%', padding: 'var(--space-8) var(--space-6)' }}>
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 8 }}>
             Meeting History
@@ -126,7 +99,10 @@ export default function History() {
         {!loading && meetings.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
             {meetings.map((e, i) => (
-              <div key={e._id || i} className="card" style={{ padding: 'var(--space-5)', display: 'flex', alignItems: 'center', gap: 'var(--space-4)', transition: 'all 150ms ease' }}
+              <div
+                key={e._id || i}
+                className="card"
+                style={{ padding: 'var(--space-4)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)', flexWrap: 'wrap', transition: 'all 150ms ease' }}
                 onMouseEnter={el => { el.currentTarget.style.borderColor = 'var(--border-strong)'; el.currentTarget.style.boxShadow = 'var(--shadow-md)'; }}
                 onMouseLeave={el => { el.currentTarget.style.borderColor = 'var(--border)'; el.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
               >
@@ -142,7 +118,7 @@ export default function History() {
 
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <Hash size={13} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                     <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {e.meetingCode}

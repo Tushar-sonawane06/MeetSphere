@@ -1,9 +1,8 @@
 import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Video, Clock, Plus, LogOut, Hash, ArrowRight, History, User, Settings } from 'lucide-react';
+import { Clock, Plus, Hash, ArrowRight } from 'lucide-react';
 import { AuthContext } from '../contexts/authContext.jsx';
-import { useTheme } from '../contexts/ThemeContext.jsx';
-import { Sun, Moon } from 'lucide-react';
+import AppHeader from '../components/AppHeader.jsx';
 import withAuth from '../utils/withAuth';
 
 function HomeComponent() {
@@ -11,7 +10,6 @@ function HomeComponent() {
   const [meetingCode, setMeetingCode] = useState('');
   const [joining, setJoining] = useState(false);
   const { addToUserHistory } = useContext(AuthContext);
-  const { theme, toggle } = useTheme();
 
   const handleJoinVideoCall = async () => {
     if (!meetingCode.trim()) return;
@@ -31,60 +29,19 @@ function HomeComponent() {
     if (e.key === 'Enter') handleJoinVideoCall();
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
-
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)', display: 'flex', flexDirection: 'column' }}>
-      {/* ── Internal Navbar ────────────────────────────── */}
-      <header style={{
-        height: 'var(--navbar-h)',
-        background: 'var(--bg-surface)',
-        borderBottom: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 var(--space-6)',
-        position: 'sticky', top: 0, zIndex: 50,
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 17, color: 'var(--text-primary)', letterSpacing: '-0.02em', textDecoration: 'none' }}>
-          <div style={{ width: 30, height: 30, background: 'var(--accent)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-            <Video size={16} strokeWidth={2.5} />
-          </div>
-          MeetSphere
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
-            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-          <Link to="/history" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <History size={14} />
-            History
-          </Link>
-          <Link to="/profile" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <User size={14} />
-            Profile
-          </Link>
-          <Link to="/settings" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Settings size={14} />
-            Settings
-          </Link>
-          <button className="btn btn-ghost btn-sm" onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--error)' }}>
-            <LogOut size={14} />
-            Logout
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* ── Main Content ───────────────────────────────── */}
-      <main style={{ flex: 1, padding: 'var(--space-10) var(--space-6)', maxWidth: 900, margin: '0 auto', width: '100%' }}>
+      <main style={{ flex: 1, padding: 'var(--space-8) var(--space-6)', maxWidth: 900, margin: '0 auto', width: '100%' }}>
 
         {/* Welcome */}
-        <div style={{ marginBottom: 40 }}>
-          <h1 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 8 }}>
+        <div style={{ marginBottom: 32 }}>
+          <h1 style={{ fontSize: 'clamp(1.4rem, 4vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 8 }}>
             {(() => {
               const hr = new Date().getHours();
-              const name = localStorage.getItem("username") || "Tushar";
+              const name = localStorage.getItem("username") || "there";
               const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
               if (hr < 12) return `Good morning, ${capitalizedName} 👋`;
               if (hr < 18) return `Good afternoon, ${capitalizedName} 👋`;
@@ -97,7 +54,10 @@ function HomeComponent() {
         </div>
 
         {/* Quick Actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--space-4)', marginBottom: 40 }}>
+        <div
+          className="home-actions-grid"
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--space-4)', marginBottom: 32 }}
+        >
           {/* New Meeting */}
           <button
             onClick={handleNewMeeting}
@@ -153,10 +113,7 @@ function HomeComponent() {
           </div>
 
           {/* History shortcut */}
-          <Link
-            to="/history"
-            style={{ textDecoration: 'none' }}
-          >
+          <Link to="/history" style={{ textDecoration: 'none' }}>
             <div
               className="card card-hover"
               style={{ padding: '28px 24px', height: '100%', cursor: 'pointer' }}
@@ -173,7 +130,10 @@ function HomeComponent() {
         {/* Tips / Info */}
         <div className="card" style={{ padding: 'var(--space-6)' }}>
           <h3 style={{ fontSize: 'var(--text-base)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: 16 }}>Quick Tips</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--space-4)' }}>
+          <div
+            className="home-tips-grid"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--space-4)' }}
+          >
             {[
               { icon: '🔗', tip: 'Share a meeting code with anyone to let them join your room' },
               { icon: '🎤', tip: 'Grant microphone and camera permissions when prompted' },

@@ -1,25 +1,18 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Video, User, Mail, Shield, Key, LogOut, CheckCircle, Home, Clock } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext.jsx';
-import { Sun, Moon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { User, Mail, Shield, Key, LogOut, CheckCircle, Clock } from 'lucide-react';
+import AppHeader from '../components/AppHeader.jsx';
 import withAuth from '../utils/withAuth';
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { theme, toggle } = useTheme();
-  
-  const username = localStorage.getItem("username") || "tushar";
+
+  const username = localStorage.getItem("username") || "user";
   const displayName = username.charAt(0).toUpperCase() + username.slice(1);
   const email = `${username.toLowerCase()}@meetsphere.com`;
-  
+
   const [successMsg, setSuccessMsg] = useState("");
   const [pwForm, setPwForm] = useState({ current: "", newPassword: "", confirm: "" });
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
@@ -32,40 +25,17 @@ function ProfilePage() {
     setTimeout(() => setSuccessMsg(""), 4000);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)', display: 'flex', flexDirection: 'column' }}>
-      {/* ── Internal Navbar ────────────────────────────── */}
-      <header style={{
-        height: 'var(--navbar-h)',
-        background: 'var(--bg-surface)',
-        borderBottom: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 var(--space-6)',
-        position: 'sticky', top: 0, zIndex: 50,
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: 17, color: 'var(--text-primary)', letterSpacing: '-0.02em', textDecoration: 'none' }}>
-          <div style={{ width: 30, height: 30, background: 'var(--accent)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
-            <Video size={16} strokeWidth={2.5} />
-          </div>
-          MeetSphere
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
-            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
-          <Link to="/home" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Home size={14} />
-            Dashboard
-          </Link>
-          <button className="btn btn-ghost btn-sm" onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--error)' }}>
-            <LogOut size={14} />
-            Logout
-          </button>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* ── Main Content ───────────────────────────────── */}
-      <main style={{ flex: 1, maxWidth: 800, margin: '0 auto', width: '100%', padding: 'var(--space-10) var(--space-6)' }}>
+      <main style={{ flex: 1, maxWidth: 800, margin: '0 auto', width: '100%', padding: 'var(--space-8) var(--space-6)' }}>
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--text-primary)', marginBottom: 8 }}>
             My Profile
@@ -96,9 +66,9 @@ function ProfilePage() {
             </div>
             <h2 style={{ fontSize: 'var(--text-lg)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>{displayName}</h2>
             <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginBottom: 24 }}>@{username.toLowerCase()}</p>
-            
+
             <div className="divider" style={{ width: '100%', margin: '16px 0' }} />
-            
+
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--text-xs)', color: 'var(--text-secondary)' }}>
                 <Shield size={14} style={{ color: 'var(--text-muted)' }} />
@@ -188,7 +158,6 @@ function ProfilePage() {
           </div>
         </div>
       </main>
-      <style>{`@media (max-width: 640px) { .profile-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   );
 }
